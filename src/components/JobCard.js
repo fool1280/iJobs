@@ -15,7 +15,7 @@ export default function JobCard(props) {
     }
     
     const handleClick = (id) => {
-        history.push(`/jobs/:${id}`);
+        history.push(`/jobs/${id}`);
     }
 
     let item = props.job;
@@ -48,12 +48,6 @@ export default function JobCard(props) {
                 </Row>
                 <Row className="mt-3">
                     <h5>Salary: ${item.salary}</h5>
-                </Row>
-                <Row className="flex-row mt-2">
-                    <h5>Benefits:</h5>
-                    <ol>
-                        {item.benefits.map((i, index) => <li key={index}>{i}</li>)}
-                    </ol>
                 </Row>
                 <Row className="flex-row mt-2">
                     <h5>Skills:</h5>

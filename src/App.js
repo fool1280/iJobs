@@ -7,7 +7,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import './App.css';
 
 export default function App() {
-  let [user, setUser] = useState(false);
+  let [user, setUser] = useState(true);
 
   const ProtectedRoute = (props) => {
     if (user === true) {
