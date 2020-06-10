@@ -46,10 +46,7 @@ export default function JobCard(props) {
                         </div>
                     </Collapse>
                 </Row>
-                <Row className="mt-3">
-                    <h5>Salary: ${item.salary}</h5>
-                </Row>
-                <Row className="flex-row mt-2">
+                <Row className="flex-row mt-3">
                     <h5>Skills:</h5>
                     <ol>
                         {item.tags.map((i, index) => {

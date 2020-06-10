@@ -8,25 +8,28 @@ const QUERYSTR_PREFIX = "q";
 export default function Jobs() {
     let query = useQuery();
     let history = useHistory();
-    let originalJobs;
     let [jobs, setJobs] = useState(null);
+    let [original, setOriginal] = useState(null);
+    let [keyword, setKey] = useState(query.get(QUERYSTR_PREFIX));
+    let tempArray = []
 
-    let keyword = "";
 
     function useQuery() {
         return new URLSearchParams(useLocation().search);
     }
 
     const handleSearch = (e) => {
-        let filteredJobs = jobs;
+        if (tempArray.length === 0) {
+            tempArray = original
+        }
+        let filteredJobs = tempArray;
         if (e) {
             e.preventDefault();
             history.push(`/jobs/?${QUERYSTR_PREFIX}=${encodeURIComponent(keyword)}`);
         }
         if (keyword) {
-            filteredJobs = jobs.filter(job =>
-            job.title.toLowerCase().includes(keyword.toLowerCase())
-        );
+            filteredJobs = tempArray.filter(job =>
+            job.title.toLowerCase().includes(keyword.toLowerCase()))
         }
         setJobs(filteredJobs);
     };
@@ -36,18 +39,16 @@ export default function Jobs() {
         let data = await fetch(url);
         let result = await data.json();
         setJobs(result);
-        originalJobs = result;
-        console.log(originalJobs);
+        setOriginal(result);
+        tempArray = result;
+        console.log("Original:", original);
         console.log("Jobs:", result);
+        handleSearch();
     };
 
     useEffect(() => {
         getData();
     }, []);
-
-    useEffect(() => {
-        handleSearch();
-    }, [originalJobs]);
 
     if (!jobs) {
         return(
@@ -62,9 +63,9 @@ export default function Jobs() {
             <Navbar.Brand>iJobs</Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
-                <Form inline className="ml-auto">
-                    <FormControl type="text" onChange={e => {keyword = e.target.value;}} placeholder="Search" className="mr-sm-2" />
-                    <Button variant="outline-success" onClick={(e) => handleSearch(e)}>Search</Button>
+                <Form inline className="ml-auto" onSubmit = {(e) => handleSearch(e)}>
+                    <FormControl type="text" onChange={e => setKey(e.target.value)} placeholder="Search" className="mr-sm-2" />
+                    <Button variant="outline-success" type="submit">Search</Button>
                 </Form>
             </Navbar.Collapse>
             </Navbar>
